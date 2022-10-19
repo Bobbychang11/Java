@@ -1,0 +1,68 @@
+// invokevirtual.jas
+// Program demonstrates method invocation
+
+.constant
+    OBJREF 0x40			// needed for method invocation
+.end-constant
+
+
+//====================== MAIN =======================
+//===================================================
+.main				   // start of program
+
+        .var
+            temp_key
+        .end-var
+
+START:  IN
+        DUP
+        ISTORE temp_key         		
+        IFEQ START              // if no characters are available for input, loop
+
+        LDC_W OBJREF            // prepare for method call
+        ILOAD temp_key          // push parameter
+        INVOKEVIRTUAL wrap_key  // call method
+        POP
+
+        LDC_W OBJREF            
+        INVOKEVIRTUAL print_hi  // no parameter
+        POP                     // discard return value
+
+        GOTO START              // do forever
+
+.end-main
+
+
+//================ WRAP KEY with < > ================
+//===================================================
+.method wrap_key( key )
+
+        BIPUSH 0x3C		 // <
+        OUT
+        ILOAD key
+        OUT
+        BIPUSH 0x3E      // >
+        OUT
+
+        BIPUSH 0         // return 0
+        IRETURN
+        
+.end-method              // end is_digit
+
+
+//=================== PRINT Hi =====================
+//===================================================
+.method print_hi()
+        BIPUSH 0x20       // space
+        OUT
+        BIPUSH 0x48       // 'H'
+        OUT
+        BIPUSH 0x69       // 'i'
+        OUT
+        BIPUSH 0xa        // CR
+        OUT
+        BIPUSH 0          // arbitrary return value
+        IRETURN
+        
+.end-method
+
